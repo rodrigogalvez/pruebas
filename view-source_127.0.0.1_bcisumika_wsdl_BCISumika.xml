@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:tns="http://127.0.0.1/bcisumika/action/BCISumika"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" name="BCISumika" targetNamespace="http://127.0.0.1/bcisumika/action/BCISumika">
+    <types>
+        <xsd:schema targetNamespace="http://127.0.0.1/bcisumika/action/BCISumika">
+            <xsd:complexType name="FileContent">
+                <xsd:all>
+                    <xsd:element name="linea" type="xsd:string" nillable="true"/>
+                </xsd:all>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfFileContent">
+                <xsd:sequence>
+                    <xsd:element name="item" type="tns:FileContent" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="Result">
+                <xsd:all>
+                    <xsd:element name="status" type="xsd:int" nillable="true"/>
+                    <xsd:element name="text" type="xsd:string" nillable="true"/>
+                </xsd:all>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+    <message name="echoIn">
+        <part name="message" type="xsd:string"/>
+    </message>
+    <message name="echoOut">
+        <part name="return" type="xsd:string"/>
+    </message>
+    <message name="createFileIn">
+        <part name="filename" type="xsd:string"/>
+        <part name="fullpath" type="xsd:string"/>
+        <part name="content" type="tns:ArrayOfFileContent"/>
+    </message>
+    <message name="createFileOut">
+        <part name="return" type="tns:Result"/>
+    </message>
+    <message name="readFileIn">
+        <part name="filename" type="xsd:string"/>
+        <part name="fullpath" type="xsd:string"/>
+    </message>
+    <message name="readFileOut">
+        <part name="return" type="tns:ArrayOfFileContent"/>
+    </message>
+    <portType name="BCISumikaPort">
+        <operation name="echo">
+            <documentation>ECHO</documentation>
+            <input message="tns:echoIn"/>
+            <output message="tns:echoOut"/>
+        </operation>
+        <operation name="createFile">
+            <documentation>Crear archivo en servidor</documentation>
+            <input message="tns:createFileIn"/>
+            <output message="tns:createFileOut"/>
+        </operation>
+        <operation name="readFile">
+            <documentation>Consultar archivo</documentation>
+            <input message="tns:readFileIn"/>
+            <output message="tns:readFileOut"/>
+        </operation>
+    </portType>
+    <binding name="BCISumikaBinding" type="tns:BCISumikaPort">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="echo">
+            <soap:operation soapAction="http://127.0.0.1/bcisumika/action/BCISumika#echo"/>
+            <input>
+                <soap:body use="literal" namespace="http://127.0.0.1/bcisumika/action/BCISumika"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://127.0.0.1/bcisumika/action/BCISumika"/>
+            </output>
+        </operation>
+        <operation name="createFile">
+            <soap:operation soapAction="http://127.0.0.1/bcisumika/action/BCISumika#createFile"/>
+            <input>
+                <soap:body use="literal" namespace="http://127.0.0.1/bcisumika/action/BCISumika"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://127.0.0.1/bcisumika/action/BCISumika"/>
+            </output>
+        </operation>
+        <operation name="readFile">
+            <soap:operation soapAction="http://127.0.0.1/bcisumika/action/BCISumika#readFile"/>
+            <input>
+                <soap:body use="literal" namespace="http://127.0.0.1/bcisumika/action/BCISumika"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://127.0.0.1/bcisumika/action/BCISumika"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="BCISumikaService">
+        <port name="BCISumikaPort" binding="tns:BCISumikaBinding">
+            <soap:address location="http://127.0.0.1/bcisumika/action/BCISumika"/>
+        </port>
+    </service>
+</definitions>
